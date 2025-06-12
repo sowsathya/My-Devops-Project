@@ -1,0 +1,19 @@
+#Install Jenkins on linux AWS
+
+1.Refer offical page of Jenkins to install the steps:
+
+https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS/
+
+2.Set the inbound rules to the instances to allow the traffic and can able to access via chrome
+Inbound port --> 8080
+
+/var/lib/jenkins/secrets/initialAdminPassword
+
+a2a4dcd4e3f54138a65ecc198a0a2be0
+
+cd /var/lib/jenkins/plugins
+sudo curl -O https://updates.jenkins.io/latest/cloudbees-folder.hpi
+sudo chown jenkins:jenkins cloudbees-folder.hpi
+sudo systemctl restart jenkins
+
+
