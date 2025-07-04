@@ -17,3 +17,144 @@ sudo chown jenkins:jenkins cloudbees-folder.hpi
 sudo systemctl restart jenkins
 
 
+Post that if we cant able to run the job due to space issue need to add swap disk.
+
+# 1. Create a 1GB swap file
+sudo fallocate -l 1G /swapfile
+
+# 2. Set the correct permissions
+sudo chmod 600 /swapfile
+
+# 3. Format it as swap
+sudo mkswap /swapfile
+
+# 4. Enable the swap
+sudo swapon /swapfile
+
+# 5. Verify it is active
+sudo swapon --show
+
+
+Step 2: (Optional) Make Swap Permanent (If you want it after reboot)
+bash
+Copy
+Edit
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+✅ Step 3: Clean Up Temporary Files
+bash
+Copy
+Edit
+sudo rm -rf /tmp/*
+sudo apt clean
+✅ Step 4: Restart Jenkins
+bash
+Copy
+Edit
+sudo systemctl restart jenkins
+✅ Step 5: Go to Jenkins UI
+Go to Dashboard > Nodes > Built-In Node
+
+Click "Mark this node online" if it’s still offline
+
+Run your job again.
+
+
+Step-by-Step to Disable Disk Space Monitor
+Step 1: Open Jenkins Script Console
+Go to:
+
+arduino
+Copy
+Edit
+http://<your-jenkins-ip>:8080/script
+Step 2: Run this Groovy Script
+groovy
+Copy
+Edit
+import jenkins.model.*
+import hudson.node_monitors.*
+
+def instance = Jenkins.getInstance()
+
+// Disable DiskSpaceMonitor
+instance.getNodeMonitors().remove(DiskSpaceMonitorDescriptor.class)
+instance.save()
+✅ This will:
+
+Turn off the disk space monitor
+
+Prevent Jenkins from automatically setting nodes offline due to disk
+
+Step 3: Bring Node Online
+Now, run this script to bring it online:
+
+groovy
+Copy
+Edit
+Jenkins.instance.getComputer("").setTemporarilyOffline(false, null)
+Step 4: Retry the Job
+Your job should now execute successfully.
+
+
+
+
+History:
+Step-by-Step to Disable Disk Space Monitor
+Step 1: Open Jenkins Script Console
+Go to:
+
+arduino
+Copy
+Edit
+http://<your-jenkins-ip>:8080/script
+Step 2: Run this Groovy Script
+groovy
+Copy
+Edit
+import jenkins.model.*
+import hudson.node_monitors.*
+
+def instance = Jenkins.getInstance()
+
+// Disable DiskSpaceMonitor
+instance.getNodeMonitors().remove(DiskSpaceMonitorDescriptor.class)
+instance.save()
+✅ This will:
+
+Turn off the disk space monitor
+
+Prevent Jenkins from automatically setting nodes offline due to disk
+
+Step 3: Bring Node Online
+Now, run this script to bring it online:
+
+groovy
+Copy
+Edit
+Jenkins.instance.getComputer("").setTemporarilyOffline(false, null)
+Step 4: Retry the Job
+Your job should now execute successfully.
+
+
+
+
+
+
+
+
+
+sudo rm -rf /tmp/*
+   34  sudo apt clean
+   35  apt clean
+   36  sudo rm -rf /tmp/*
+   37  sudo apt clean
+   38  sudo systemctl restart jenkins
+   39  sudo fallocate -l 1G /swapfile
+   40  sudo chmod 600 /swapfile
+   41  sudo mkswap /swapfile
+   42  sudo swapon /swapfile
+   43  sudo swapon --show
+   44  sudo systemctl restart jenkins
+   45  echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+   46  sudo systemctl restart jenkins
+
